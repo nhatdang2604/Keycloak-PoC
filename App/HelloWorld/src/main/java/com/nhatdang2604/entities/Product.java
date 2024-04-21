@@ -1,8 +1,11 @@
 package com.nhatdang2604.entities;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Setter
+@Getter
 @Table(name = "products")
 public class Product {
 

@@ -1,5 +1,6 @@
 package com.nhatdang2604.controllers;
 
+import com.nhatdang2604.dtos.ProductDto;
 import com.nhatdang2604.entities.Product;
 import com.nhatdang2604.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,25 +17,24 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping("/save")
-    public ResponseEntity<Product> save(@RequestBody Product product) {
-        List<Product> toInsert = Arrays.asList(product);
-        List<Product> afterInsert = productService.saveAll(toInsert);
-        Product inserted = afterInsert.getFirst();
+    @PostMapping("/")
+    public ResponseEntity<ProductDto> save(@RequestBody ProductDto product) {
+        List<ProductDto> toInsert = Arrays.asList(product);
+        List<ProductDto> afterInsert = productService.saveAll(toInsert);
+        ProductDto inserted = afterInsert.getFirst();
         return ResponseEntity.ok(inserted);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getProductById(@PathVariable Long id) {
-        // List<Long> toFind = Arrays.asList(id);
-        // List<ProductDto> founds =  productService.findByIds(toFind);
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
+        List<Long> toFind = Arrays.asList(id);
+        List<ProductDto> founds =  productService.findByIds(toFind);
 
-        // if (founds.isEmpty()) {
-        //     return ResponseEntity.notFound().build();
-        // }
-        // ProductRecord found = founds.getFirst();
-        // return ResponseEntity.ok(found);
-        return ResponseEntity.ok("test he hehehehehe");
+        if (founds.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        ProductDto found = founds.getFirst();
+        return ResponseEntity.ok(found);
     }
 
 }

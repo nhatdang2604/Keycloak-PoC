@@ -2,6 +2,7 @@ package com.nhatdang2604.services;
 
 import com.nhatdang2604.entities.Product;
 import com.nhatdang2604.dtos.ProductDto;
+import com.nhatdang2604.mappers.dtos.ProductMapper;
 import com.nhatdang2604.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,19 @@ import java.util.List;
 public class ProductServiceImp implements ProductService {
 
     @Autowired
+    private ProductMapper productMapper;
+
+    @Autowired
     private ProductRepository productRepository;
 
-    @Transactional
     @Override
-    public List<Product> saveAll(List<Product> records) {
-        return productRepository.saveAll(records);
+    public List<ProductDto> saveAll(List<ProductDto> dtos) {
+        System.out.println(dtos.getFirst());
+        List<Product> products = dtos.stream().map(productMapper::toEntity).toList();
+        System.out.println(products.getFirst());
+        List<Product> insertedProducts = productRepository.saveAll(products);
+        List<ProductDto> insertedDtos = insertedProducts.stream().map(productMapper::toDto).toList();
+        return insertedDtos;
     }
 
     @Override

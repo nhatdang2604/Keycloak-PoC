@@ -1,4 +1,6 @@
-# Network
+# Postgres with Keycloak
+
+## Network
 
 Create a network between Keycloak and its db (PostgreSQL)
 
@@ -6,7 +8,7 @@ Create a network between Keycloak and its db (PostgreSQL)
 docker network create keycloak-postgres
 ```
 
-# Postgres for Keycloak
+## Postgres
 
 ```
 docker pull postgres:16.2 
@@ -25,7 +27,7 @@ docker run \
     postgres:16.2
 ```
 
-# Keycloak
+## Keycloak
 ```
 docker build ./Keycloak -t keycloak-poc
 ```
@@ -49,8 +51,16 @@ docker run \
     start-dev
 ```
 
-# MySQL for App
-## Build & Run MySQL
+# MySQL with App
+## Network
+Create a network between app and its db (MySQL)
+
+```
+docker network create app-mysql
+```
+
+## MySQL
+### Build & Run MySQL
 ```
 docker pull mysql/mysql-server:8.0
 ```
@@ -58,18 +68,38 @@ docker pull mysql/mysql-server:8.0
 ```
 docker run \
     --rm \
+    --network app-mysql \
     --name appdb \
     --publish 3306:3306 \
     --env MYSQL_ROOT_PASSWORD=admin \
-    --volume  mysql:/var/lib/mysql \
+    --volume mysql:/var/lib/mysql \
     --detach \
     mysql/mysql-server:8.0
 ```
 
-## Create an account for app and grant permissions
+### Create an account for app and grant permissions
 ```
 CREATE USER 'app'@'%' IDENTIFIED WITH mysql_native_password BY 'app'
 ```
 ```
 GRANT ALL PRIVILEGES ON *.* TO 'app'@'%' WITH GRANT OPTION;
+```
+
+## App
+```
+docker pull openjdk:22-slim-bullseye
+```
+```
+docker build --no-cache ./App/HelloWorld -t app
+```
+```
+docker run \
+    --rm \
+    --name app \
+    --network app-mysql \
+    --publish 8088:8088 \
+    --env SPRING_DATASOURCE_URL=jdbc:mysql://appdb:3306/mysql \
+    --env SPRING_DATASOURCE_USERNAME=app \
+    --env SPRING_DATASOURCE_PASSWORD=app \
+    app
 ```
