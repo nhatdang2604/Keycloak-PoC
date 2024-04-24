@@ -9,14 +9,15 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.nhatdang2604</groupId>
-	<artifactId>HelloWorld</artifactId>
+	<artifactId>InventoryManager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>HelloWorld</name>
-	<description>HelloWorld</description>
+	<name>InventoryManager</name>
+	<description>InventoryManager</description>
 	<properties>
 		<java.version>22</java.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+		<org.keycloak.version>10.0.0</org.keycloak.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -64,6 +65,18 @@
 			<version>${org.mapstruct.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -89,5 +102,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
