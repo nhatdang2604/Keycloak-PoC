@@ -79,7 +79,7 @@ docker run \
 
 ### Create an account for app and grant permissions
 ```
-CREATE USER 'app'@'%' IDENTIFIED WITH mysql_native_password BY 'app'
+CREATE USER 'app'@'%' IDENTIFIED WITH mysql_native_password BY 'app';
 ```
 ```
 GRANT ALL PRIVILEGES ON *.* TO 'app'@'%' WITH GRANT OPTION;
@@ -90,7 +90,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'app'@'%' WITH GRANT OPTION;
 docker pull openjdk:22-slim-bullseye
 ```
 ```
-docker build --no-cache ./App/HelloWorld -t app
+docker build --no-cache ./App/InventoryManager -t app
 ```
 ```
 docker run \
@@ -101,5 +101,7 @@ docker run \
     --env SPRING_DATASOURCE_URL=jdbc:mysql://appdb:3306/mysql \
     --env SPRING_DATASOURCE_USERNAME=app \
     --env SPRING_DATASOURCE_PASSWORD=app \
+    --env KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/inventory-manager \
+    --env KEYCLOAK_APP_CLIENT_ID=inventory-manager \
     app
 ```
