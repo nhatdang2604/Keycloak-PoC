@@ -45,11 +45,15 @@ docker run \
     --env KC_DB_URL=jdbc:postgresql://keycloakdb:5432/postgres \
     --env KC_DB_USERNAME=keycloak \
     --env KC_DB_PASSWORD=keycloak \
-    --env KC_HOSTNAME=localhost \
+    --env KC_HOSTNAME=keycloak-instance \
     --detach \
     keycloak-poc \
     start-dev
 ```
+
+Please create Keycloak's stuffs with below information
+- Realm's name: app
+- Realm's client: inventory-manager
 
 # MySQL with App
 ## Network
@@ -90,7 +94,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'app'@'%' WITH GRANT OPTION;
 docker pull openjdk:22-slim-bullseye
 ```
 ```
-docker build --no-cache ./App/InventoryManager -t app
+docker build ./App/InventoryManager -t app
 ```
 ```
 docker run \
@@ -101,7 +105,19 @@ docker run \
     --env SPRING_DATASOURCE_URL=jdbc:mysql://appdb:3306/mysql \
     --env SPRING_DATASOURCE_USERNAME=app \
     --env SPRING_DATASOURCE_PASSWORD=app \
-    --env KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/inventory-manager \
+    --env KEYCLOAK_ISSUER_URI=http://keycloak-instance:8080/realms/app \
     --env KEYCLOAK_APP_CLIENT_ID=inventory-manager \
-    app
+    app 
+```
+
+# App and Keycloak
+Create a network between Keycloak and our App (PostgreSQL)
+```
+docker network create keycloak-app
+```
+
+Connect app with keycloak
+```
+docker network connect keycloak-app keycloak-instance
+docker network connect keycloak-app app
 ```

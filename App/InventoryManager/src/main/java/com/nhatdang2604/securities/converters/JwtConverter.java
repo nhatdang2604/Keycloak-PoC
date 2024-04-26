@@ -32,9 +32,6 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
     public AbstractAuthenticationToken convert(Jwt jwt) {
         
         Collection<GrantedAuthority> converted = jwtGrantedAuthoritiesConverter.convert(jwt);
-        System.out.println(converted);
-        System.out.println(null == converted);
-
         if (null == converted) {
             return null;
         }
@@ -52,38 +49,21 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
     private Collection <? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
         if (null == resourceAccess) {
-            System.out.println("Empty resource access");
             return Collections.emptySet();
-        }
-
-        for (String key : resourceAccess.keySet()) {
-            System.out.println("Key: " + key);
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> resource = (Map<String, Object>) resourceAccess.get(properties.getResourceId());
         if (null == resource) {
-            System.out.println("Empty resource");
             return Collections.emptySet();
-        }
-
-        for (String key : resource.keySet()) {
-            System.out.println("Key: " + key);
         }
 
         @SuppressWarnings("unchecked")
         Collection<String> resourceRoles = (Collection<String>) resource.get("roles");
         if (null == resourceRoles) {
-            System.out.println("Empty resource roles");
             return Collections.emptySet();
         }
 
-        for (String role : resourceRoles) {
-            System.out.println("Role: " + role);
-        }
-
-
-        System.out.println("Finished extracting resource roles");
         return resourceRoles.stream()
             .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
             .collect(Collectors.toSet());

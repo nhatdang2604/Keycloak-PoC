@@ -20,9 +20,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println(jwtConverter);
-        System.out.println(jwtConverter == null);
-
         http.authorizeHttpRequests(auth -> auth
             .anyRequest()
             .authenticated()
