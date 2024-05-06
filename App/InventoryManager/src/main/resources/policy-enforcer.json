@@ -1,0 +1,8 @@
+{
+  "realm": "app",
+  "auth-server-url": "http://keycloak-instance:8080",
+  "resource": "inventory-manager",
+  "credentials": {
+    "secret": "RMoWUA2hgLTZX0HX7btuQ65sGALwe9H8"
+  }
+}
