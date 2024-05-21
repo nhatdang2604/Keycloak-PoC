@@ -1,8 +1,10 @@
 package com.nhatdang2604.securities.handlers;
 
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -11,19 +13,23 @@ import java.io.IOException;
  * Responsible to handle unauthorized response generated after keycloak enforcer and customize the response as needed.
  */
 @Component
-public class ForbiddenHandler implements Filter {
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
+public class ForbiddenHandler implements AccessDeniedHandler {
 
-        if(httpServletResponse.getStatus() == HttpStatus.SC_FORBIDDEN) {
-            httpServletResponse.getWriter().write("{\n" +
-                    "    \"status\": 503,\n" +
-                    "    \"error\": \"This resource is only for premium user. Kindly pay first.\",\n" +
-                    "    \"message\": \"Your are not authorized for this end-point\"\n" +
-                    "}");
-            httpServletResponse.setStatus(HttpStatus.SC_SERVICE_UNAVAILABLE);
-            httpServletResponse.setContentType("application/json");
-        }
+    @Override
+    public void handle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AccessDeniedException accessDeniedException
+    ) throws IOException, ServletException {
+
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        response.getWriter().write(
+                "{\n" +
+                "    \"status\": 403,\n" +
+                "    \"message\": \"Your are not authorized for this end-point\"\n" +
+                "}"
+        );
+
     }
 }

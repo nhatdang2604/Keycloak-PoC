@@ -18,7 +18,8 @@ public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
         response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-        response.getWriter().write("{\n" +
+        response.getWriter().write(
+                "{\n" +
                 "    \"status\": " + HttpStatus.SC_UNAUTHORIZED + ",\n" +
                 "    \"error\": \"" + authException.getMessage() + "\",\n" +
                 "    \"message\": \"" + "Your token is expired, Please generate a new one." + "\",\n" +
