@@ -21,7 +21,6 @@ public class AuthenticationEntryPointHandler implements AuthenticationEntryPoint
         response.getWriter().write(
                 "{\n" +
                 "    \"status\": " + HttpStatus.SC_UNAUTHORIZED + ",\n" +
-                "    \"error\": \"" + authException.getMessage() + "\",\n" +
                 "    \"message\": \"" + "Your token is expired, Please generate a new one." + "\",\n" +
                 "}");
         response.setHeader(HTTP.CONTENT_TYPE, "application/json");

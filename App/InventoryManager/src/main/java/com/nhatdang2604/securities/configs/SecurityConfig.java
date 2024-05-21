@@ -1,18 +1,20 @@
 package com.nhatdang2604.securities.configs;
 
 import com.nhatdang2604.securities.handlers.AuthenticationEntryPointHandler;
-import com.nhatdang2604.securities.handlers.ForbiddenHandler;
 import lombok.RequiredArgsConstructor;
 
 import org.keycloak.adapters.authorization.integration.jakarta.ServletPolicyEnforcerFilter;
 import org.keycloak.representations.adapters.config.PolicyEnforcerConfig;
 import org.keycloak.util.JsonSerialization;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -27,14 +29,16 @@ public class SecurityConfig {
     @Autowired
     private AuthenticationEntryPointHandler authenticationEntryPointHandler;
 
-    @Autowired
-    private ForbiddenHandler forbiddenHandler;
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+    private String jwkSetUri;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
+            .requestMatchers("api/v1/auth/access-denied")
+                .permitAll()
             .anyRequest()
-            .authenticated()
+                .authenticated()
         );
 
         http.oauth2ResourceServer(oauth2 -> oauth2
@@ -44,11 +48,6 @@ public class SecurityConfig {
 
         http.addFilterAfter(
                 createPolicyEnforcerFilter(),
-                BearerTokenAuthenticationFilter.class
-        );
-
-        http.addFilterAfter(
-                forbiddenHandler,
                 BearerTokenAuthenticationFilter.class
         );
 
@@ -65,5 +64,10 @@ public class SecurityConfig {
         }
 
         return new ServletPolicyEnforcerFilter(httpRequest -> config);
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withJwkSetUri(this.jwkSetUri).build();
     }
 }

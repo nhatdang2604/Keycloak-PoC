@@ -4,5 +4,7 @@
   "resource": "inventory-manager",
   "credentials": {
     "secret": "RMoWUA2hgLTZX0HX7btuQ65sGALwe9H8"
-  }
+  },
+  "on-deny-redirect-to": "/api/v1/auth/access-denied",
+  "lazy-load-paths": true
 }

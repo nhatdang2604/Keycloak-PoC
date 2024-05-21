@@ -121,3 +121,10 @@ Connect app with keycloak
 docker network connect keycloak-app keycloak-instance
 docker network connect keycloak-app app
 ```
+
+# Note.
+
+### Warning
+
+While config with Keycloak Authorization service, please check the resource url carefully.
+[![Authz Resources config warning](/Resources/imgs/Keycloak-Authz-Resources-config.png)]
