@@ -124,7 +124,13 @@ docker network connect keycloak-app app
 
 # Note.
 
-### Warning
+## Warning
+
+### While config authorization service with scope and resource
 
 While config with Keycloak Authorization service, please check the resource url carefully.
 [![Authz Resources config warning](/Resources/imgs/Keycloak-Authz-Resources-config.png)]
+
+### After editing authorization service config
+The change would not apply immediately, please waiting about 1-2 minute(s) then regression testing
+
