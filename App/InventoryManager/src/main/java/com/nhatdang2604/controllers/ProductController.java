@@ -37,4 +37,16 @@ public class ProductController {
         return ResponseEntity.ok(found);
     }
 
+    @PostMapping("/{id}")
+    public ResponseEntity<ProductDto> getProductById2(@PathVariable Long id) {
+        List<Long> toFind = Arrays.asList(id);
+        List<ProductDto> founds =  productService.findByIds(toFind);
+
+        if (founds.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        ProductDto found = founds.getFirst();
+        return ResponseEntity.ok(found);
+    }
+
 }
