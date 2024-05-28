@@ -64,21 +64,48 @@ docker network create app-mysql
 ```
 
 ## MySQL
-### Build & Run MySQL
+### Pull base image
 ```
 docker pull mysql/mysql-server:8.0
+```
+
+### Master
+
+```
+docker build ./MySQL/master -t mysql-master
 ```
 
 ```
 docker run \
     --rm \
     --network app-mysql \
+    --network mysql-cluster \
     --name appdb \
     --publish 3306:3306 \
     --env MYSQL_ROOT_PASSWORD=admin \
     --volume mysql:/var/lib/mysql \
     --detach \
-    mysql/mysql-server:8.0
+    mysql-master
+```
+
+### Slave
+
+```
+docker build ./MySQL/slave -t mysql-slave
+```
+
+```
+docker run \
+    --rm \
+    --network app-mysql \
+    --network mysql-cluster \
+    --name appdb-slave \
+    --publish 3307:3307 \
+    --env MYSQL_ROOT_PASSWORD=admin \
+    --env MYSQL_PORT=3307 \
+    --volume mysql-slave:/var/lib/mysql \
+    --detach \
+    mysql-slave
 ```
 
 ### Create an account for app and grant permissions
