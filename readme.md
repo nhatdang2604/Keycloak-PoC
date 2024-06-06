@@ -161,3 +161,6 @@ While config with Keycloak Authorization service, please check the resource url 
 ### After editing authorization service config
 The change would not apply immediately, please waiting about 1-2 minute(s) then regression testing
 
+# Replication
+
+Please read [here](https://www.digitalocean.com/community/tutorials/how-to-set-up-replication-in-mysql)
