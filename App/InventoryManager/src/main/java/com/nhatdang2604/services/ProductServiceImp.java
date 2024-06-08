@@ -21,9 +21,8 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public List<ProductDto> saveAll(List<ProductDto> dtos) {
-        System.out.println(dtos.getFirst());
+
         List<Product> products = dtos.stream().map(productMapper::toEntity).toList();
-        System.out.println(products.getFirst());
         List<Product> insertedProducts = productRepository.saveAll(products);
         List<ProductDto> insertedDtos = insertedProducts.stream().map(productMapper::toDto).toList();
         return insertedDtos;
