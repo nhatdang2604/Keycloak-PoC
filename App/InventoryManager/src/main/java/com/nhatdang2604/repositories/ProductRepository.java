@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("""
-        SELECT new com.nhatdang2604.dtos.ProductDto(p.id, p.name)
+        SELECT new com.nhatdang2604.dtos.ProductDto(p.id, p.name, p.createdAt, p.updatedAt)
         FROM Product p
         WHERE p.id IN :ids
     """)

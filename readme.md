@@ -129,7 +129,7 @@ docker run \
     --name app \
     --network app-mysql \
     --publish 8088:8088 \
-    --env SPRING_DATASOURCE_URL=jdbc:mysql://appdb:3306/mysql \
+    --env SPRING_DATASOURCE_URL=jdbc:mysql://appdb:3306/inventory \
     --env SPRING_DATASOURCE_USERNAME=app \
     --env SPRING_DATASOURCE_PASSWORD=app \
     --env KEYCLOAK_ISSUER_URI=http://keycloak-instance:8080/realms/app \
