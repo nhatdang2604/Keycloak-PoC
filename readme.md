@@ -8,6 +8,11 @@ Create a network between Keycloak and its db (PostgreSQL)
 docker network create keycloak-postgres
 ```
 
+Create a network between Keycloak and our App (PostgreSQL)
+```
+docker network create keycloak-app
+```
+
 ## Postgres
 
 ```
@@ -36,6 +41,7 @@ docker build ./Keycloak -t keycloak-poc
 docker run \
     --rm \
     --network keycloak-postgres \
+    --network keycloak-app \
     --name keycloak-instance \
     --publish 8443:8443 \
     --publish 8080:8080 \
@@ -128,6 +134,7 @@ docker run \
     --rm \
     --name app \
     --network app-mysql \
+    --network keycloak-app \
     --publish 8088:8088 \
     --env SPRING_DATASOURCE_URL=jdbc:mysql://appdb:3306/inventory \
     --env SPRING_DATASOURCE_USERNAME=app \
@@ -135,18 +142,6 @@ docker run \
     --env KEYCLOAK_ISSUER_URI=http://keycloak-instance:8080/realms/app \
     --env KEYCLOAK_APP_CLIENT_ID=inventory-manager \
     app 
-```
-
-# App and Keycloak
-Create a network between Keycloak and our App (PostgreSQL)
-```
-docker network create keycloak-app
-```
-
-Connect app with keycloak
-```
-docker network connect keycloak-app keycloak-instance
-docker network connect keycloak-app app
 ```
 
 # Note.
